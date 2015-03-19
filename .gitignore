@@ -52,3 +52,16 @@ docs/_build/
 
 # PyBuilder
 target/
+
+*.log
+.settings
+.classpath
+.git
+.project
+.pydevproject
+.DS_Store
+.ropeproject
+*.db
+*.pid
+*.json
+celerybeat-schedule
