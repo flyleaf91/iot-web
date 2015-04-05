@@ -36,7 +36,7 @@ def get_lockinfo(dev_id, evt_type=0, start=None, end=None):
     ret = None
     try:
         lockinfo = LockInfo.objects.filter(device_id=dev_id, 
-                                           event_type=evt_type)
+                   event_type=evt_type).order_by('-event_time')
         lockinfo_se = LockInfoSerializer(lockinfo, many=True)
         ret = lockinfo_se.data
     except LockInfo.DoesNotExist:
