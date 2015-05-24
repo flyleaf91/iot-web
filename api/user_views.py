@@ -59,7 +59,9 @@ def login(request):
             login_data['login_key'] = id_generator(size=20)
             login_data['valid_end_time'] = datetime.now() + timedelta(days=30)
             if add_login(login_data):
-                data = {'status': 0, 'detail': '%s' % login_data['login_key']}
+                login_data.pop('password')
+                login_data['valid_end_time'] = datetime.
+                data = {'status': 0, 'detail': login_data}
             else:
                 data = {'status': 1, 'detail': 'login failed.'}
         else:
