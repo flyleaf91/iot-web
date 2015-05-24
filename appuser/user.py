@@ -48,6 +48,31 @@ def get_user(username):
     return ret
 
 
+def add_login(data):
+    '''
+    @summary: add (if no) or update a login record.
+    @parm data: a dict data for the Login's serializer.
+    @return: True (if added), False (if not added).
+    '''
+    try:
+        user = user = User.objects.get(user=data['user'],
+                                       password=data['password'])
+    except User.DoesNotExist:
+        return False
+    try:
+        login = Login.objects.get(user=data['user'],
+                                  login_key=data['login_key'])
+        login_se = LoginSerializer(login, data=data, partial=True)
+    except Login.DoesNotExist:
+        login_se = LoginSerializer(data=data)
+    print dict(data)
+    if login_se.is_valid():
+        login_se.save()
+        return True
+    else:
+        return False
+
+
 if __name__ == '__main__':
     django.setup()
     user = 'Jay'
