@@ -53,14 +53,16 @@ def login(request):
         req = Request(request)
         thekey = req.DATA.get('thekey', default='123')
         if key_validation(thekey):
+            valid_endtime = datetime.now() + timedelta(days=30)
+            valid_endtime_str = valid_endtime.strftime("%Y-%m-%d %H:%M:%S")
             login_data = dict()
             login_data['user'] = req.DATA.get('user', default='abc')
             login_data['password'] = req.DATA.get('password', default='abc')
             login_data['login_key'] = id_generator(size=20)
-            login_data['valid_end_time'] = datetime.now() + timedelta(days=30)
+            login_data['valid_end_time'] = valid_endtime
             if add_login(login_data):
                 login_data.pop('password')
-                login_data['valid_end_time'] = datetime.
+                login_data['valid_end_time'] = valid_endtime_str
                 data = {'status': 0, 'detail': login_data}
             else:
                 data = {'status': 1, 'detail': 'login failed.'}
