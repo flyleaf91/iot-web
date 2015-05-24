@@ -45,6 +45,6 @@ def get_lockcmd(dev_id, status):
 if __name__ == '__main__':
     django.setup()
     cmd_data = {'device_id': 'hello123', 'command': 'unlock',
-                'status': 'initialized'}
+                'user': 'smile', 'status': 'initialized'}
     print add_cmd(cmd_data)
     print get_lockcmd(dev_id='hello123', status='initialized')

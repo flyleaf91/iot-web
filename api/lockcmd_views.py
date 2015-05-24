@@ -46,15 +46,15 @@ def get_latest_cmd(request):
         thekey = req.QUERY_PARAMS.get('thekey', default='123')
         if key_validation(thekey):
             cmd_data = copy.copy(req.QUERY_PARAMS)
-            print cmd_data
             cmd_data.pop('thekey')
             dev_id = cmd_data.get('dev_id')
             status = 'initialized'
             lock_cmd_data = get_lockcmd(dev_id, status)
             if lock_cmd_data:
-                data = {'status': 0, 'detail': lock_cmd_data['command']}
+                data = {'status': 0, 'detail': lock_cmd_data['command'],
+                        'user': lock_cmd_data['user']}
             else:
-                data = {'status': 0, 'detail': 'no cmd.'}
+                data = {'status': 0, 'detail': 'no cmd.', 'user': 'Jay'}
         else:
             data = {'status': 1, 'detail': 'security key error.'}
         return JSONResponse(data=data, status=200)
