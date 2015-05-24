@@ -8,6 +8,7 @@ Created on May 16, 2015
 import django
 from lock.models import LockCmd
 from lock.serializers import LockCmdSerializer
+from datetime import datetime, timedelta
 
 
 def add_cmd(data):
@@ -33,12 +34,26 @@ def get_lockcmd(dev_id, status):
     '''
     ret = None
     lockcmd = LockCmd.objects.filter(device_id=dev_id,
-                         status=status).order_by('-create_time')
+                                     status=status).order_by('-create_time')
     lockcmd_se = LockCmdSerializer(lockcmd, many=True)
     if len(lockcmd_se.data) >= 1:
         ret = lockcmd_se.data[0]
     else:
         pass
+    return ret
+
+
+def cmd_timeout(timeout):
+    '''
+    @summary: change some lockcmd to 'timeout' status.
+    @param timeout: the time (in seconds) a cmd should timeout.
+    @return: the number of timeouted records.
+    '''
+    invalid_time = datetime.now() - timedelta(seconds=timeout)
+    status_list = ['initialized', 'processing']
+    ret = LockCmd.objects.filter(status__in=status_list).\
+                              filter(create_time__lt=invalid_time).\
+                              update(status='timeout')
     return ret
 
 
@@ -48,3 +63,4 @@ if __name__ == '__main__':
                 'user': 'smile', 'status': 'initialized'}
     print add_cmd(cmd_data)
     print get_lockcmd(dev_id='hello123', status='initialized')
+    print cmd_timeout(timeout=60)
